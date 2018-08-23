@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>MariateguiVis :: LaRed</title>
+  <link href="css/styles.css" rel="stylesheet">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <style>
+  #custom-handle {
+    width: 8em;
+    height: 3em;
+    top: 10%;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    line-height: 1em;
+    font-size: 1em;
+    margin:0 50% 0 auto;
+  }
+  #slider {
+    width:80%;
+    margin-left:40px;
+  }
+  </style>
+  <script src="./js/jquery.min.js" charset="utf-8"></script>
+  <script src="./js/jquery.mousewheel.min.js" charset="utf-8"></script>
+  <script src="./js/raphael.min.js" charset="utf-8"></script>
+  <script src="./js/jquery.mapael.js" charset="utf-8"></script>
+  <script src="./js/maps/world_countries.js" charset="utf-8"></script>
+  <script src="./js/maps/peru.min.js" charset="utf-8"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <script src="./data/mariategui_lared.js" charset="utf-8"></script>
+  <script type="text/javascript">
+
+  // Get date from URL POST var:
+
+  //var mydateY = "19240101_19241231";
+  //var mydateX = "19250101_19251231";
+  //var mydate_default = "19230101";
+  //function getParameterByName(name) {
+  //  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+  //}
+
+  // Getting plots from data/events.js
+  function get_plots(map, mydate) {
+    my = {};
+    console.log("F get_plots ( "+map+"|"+mydate+" )");
+    $.each( events, function( key, value ) {
+      if (mydate >= value["date"])  {
+        my[value["name"]] = value["data"];
+        console.log("> > > Accepted "+value["name"]+": my="+mydate+" >= "+value["date"]);
+      }
+    });
+    //console.log(my.toString());
+    return my;
+  }
+
+  function get_plots_labels(map, mydate) {
+    var my = [];
+    console.log("F get_LABELS ( "+map+"|"+mydate+" )");
+    $.each( events, function( key, value ) {
+      if (mydate >= value["date"])  {
+        my.push(value["name"]);
+        console.log("> > > Accepted "+value["name"]+": my="+mydate+" >= "+value["date"]);
+      }
+    });
+    return my;
+  }
+
+    $( function() {
+      var dt_from = "1923/01/01 00:00:01";
+      var dt_to = "1926/12/31 23:59:59";
+
+      $('.slider-time').html(dt_from);
+      //$('.slider-time2').html(dt_to);
+      var min_val = Date.parse(dt_from) / 1000;
+      var max_val = Date.parse(dt_to) / 1000;
+
+      function zeroPad(num, places) {
+        var zero = places - num.toString().length + 1;
+        return Array(+(zero > 0 && zero)).join("0") + num;
+      }
+
+      function formatDT(__dt) {
+        var year = __dt.getFullYear();
+        var month = zeroPad(__dt.getMonth() + 1, 2);
+        var date = zeroPad(__dt.getDate(), 2);
+        //var hours = zeroPad(__dt.getHours(), 2);
+        //var minutes = zeroPad(__dt.getMinutes(), 2);
+        //var seconds = zeroPad(__dt.getSeconds(), 2);
+        var mydate = [];
+        mydate["y"] = year;
+        mydate["m"] = month;
+        //mydate[d] = date;
+
+        //return year + '-' + month + '-' + date + ' ' + hours + ':' + minutes + ':' + seconds;
+        return mydate["m"]+"-"+mydate["y"];
+      };
+
+
+      $("#slider-range").slider({
+        //range: false,
+        min: min_val,
+        max: max_val,
+        step: 10,
+        values: [min_val, max_val],
+        slide: function(e, ui) {
+          var dt_cur_from = new Date(ui.values[0] * 1000); //.format("yyyy-mm-dd hh:ii:ss");
+          $('.slider-time').html(formatDT(dt_cur_from));
+
+          //var dt_cur_to = new Date(ui.values[1] * 1000); //.format("yyyy-mm-dd hh:ii:ss");
+          //$('.slider-time2').html(formatDT(dt_cur_to));
+        }
+      });
+
+    });
+  </script>
+
+</head>
+
+<!-- ############################################## -->
+<!-- ############################################## -->
+<!-- ############################################## -->
+
+<body>
+<div class="container">
+    <div>
+        <h1>THE APP READS PLOTS FROM A js oBJECT (mariategui_events_v3.js)</h1>
+                <ul><li>Radio botton: point in time OR period (choose kind of slide)</li>
+                  <li>Set animDuration</li>
+                  <li>Set loop or not-loop</li>
+                  <li></li>
+                </ul>
+                <p class="setDate" id="19240101">No PageLoad 1924 1231</p>
+                <p class="setDate" id="19270101">No PageLoad 1927 1231</p>
+
+          <p id="output">OUTPUT</p>
+    </div>
+
+    <div class="" style="width:100%;">
+      <div id="time-ran">
+        <p>Time Range:
+          <span class="slider-time"></span>
+          <!--
+           - <span class="slider-time2"></span>
+         -->
+        </p>
+        <div class="sliders_step1">
+          <div id="slider-range"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mapcontainer mapcontainer_refresh div_map_left">
+          <h2>Mapa del Perú</h2>
+          <div class="map">
+              <span>Alternative content for the map</span>
+          </div>
+      </div>
+
+      <div class="mapcontainer2 mapcontainer_refresh div_map_right">
+          <h2>Mapa Mundial</h2>
+          <div class="map">
+              <span>Alternative content for the map</span>
+          </div>
+      </div>
+    </div>
+  <div>OLD DATE:
+    <div id="old_date"></div>
+  </div>
+
+<!----------------------------------------------->
+
+<script>
+
+$(function () {
+    /*
+     * Override default option example
+     * Here we override defaultOptions for all instance!
+     * => We want to set the stroke color different for all of our instance
+     */
+    $.mapael.prototype.defaultOptions.map.defaultArea.attrs.stroke = "#c3c3c3";
+
+    /*
+     * Override method example
+     * Here we override the setTooltip() method for all instance !
+     * => We want that area having a tooltip appears as red when mouse over
+     */
+    // Save setTooltip function for future use
+    var baseSetTooltip = $.mapael.prototype.setTooltip;
+    $.mapael.prototype.setTooltip = function(elem){
+        // Save ref to Mapael object in self
+        var self = this;
+        // Some special processing for "path" element having a tooltip
+        if (elem.type === "path") {
+            elem.attrsHover.fill = "#FF0000";
+        }
+        // Call base Mapael function
+        baseSetTooltip.call(self, elem);
+    };
+
+
+///////////////////////////////////////
+//// MAP1
+
+    $(".mapcontainer").mapael({
+        map: {
+            name: "peru_regions"
+            , zoom: {
+                enabled: true
+            }
+            , defaultPlot: {
+                attrs: {
+                    fill: "#ff0000",
+                    opacity: 10
+                }
+                , text: {
+                    attrs: {
+                        fill: "#ff0000"
+                    }
+                    , attrsHover: {
+                        fill: "#000"
+                    }
+                }
+            }
+            , defaultArea: {
+                attrs: {
+                    fill: "#000000"
+                }
+                , text: {
+                    attrs: {
+                        fill: "#ffffff"
+                    }
+                    , attrsHover: {
+                        fill: "#000"
+                    }
+                }
+            }
+        },
+        areas: {
+            "lima": {
+                text: {content: "Lima Region"},
+                tooltip: {content: "region de Lima"},
+                attrs: {opacity: 0.4}
+            },
+        },
+        plots: {
+            //get_plots(mariategui_plots, "peru")
+        }
+    });
+
+// >>>>>>>>>>>>>>>>>>>>>>>>
+/*
+// I use the updater from the MAP2 to update both maps
+$('#world').on('click', function (event){
+
+    // delete all plots ...
+    var deletedPlots = get_plots_labels(mariategui_plots, "world");
+
+    // Update some plots and areas attributes ...
+    // Not Usedm here
+
+   // add some new plots ...
+   var newPlots = get_plots(mariategui_plots, "world");
+
+    $(".mapcontainer_refresh").trigger('update', [{
+        deletePlotKeys: deletedPlots,
+        //mapOptions: updatedOptions,
+        newPlots: newPlots,
+        animDuration: 1000
+    }]);
+
+    // Save mydate as old_date var:
+    $("#old_date").html(mydate);
+ });
+});
+*/
+
+///////////////////////////////////////////
+//// MAP2
+
+    var $mapcontainer2 = $(".mapcontainer2");
+    $mapcontainer2.mapael({
+        map: {
+            name: "world_countries"
+            , zoom: {
+                enabled: true,
+                maxLevel: 20
+            }
+            , defaultPlot: {
+                attrs: {
+                  fill: "#ff0000",
+                  opacity: 1
+                }
+            }
+        },
+        plots: {
+            //get_plots(mariategui_plots, "world")
+        }
+    });
+
+// >>>>>>>>>>>>>>>>>>>>>>>>
+// UPDATING THE MAPS function
+    $('.setDate').on('click', function (event) {
+      console.log("###########################")
+      // Get new date
+      var mydate = event.target.id;
+      console.log("NEW mydate :"+mydate)
+
+      // Get the old date
+      var olddate = $("#old_date").html();
+      console.log("OLD date :"+olddate)
+      // Save new date:
+      $("#old_date").html(mydate);
+
+      // delete all plots ...
+      if (olddate.length<1) {
+        var deletedPlots = {};
+      } else {
+        var deletedPlots = get_plots_labels("peru", olddate);
+      }
+      console.log("deletedPlots: "+deletedPlots)
+
+       // Update some plots and areas attributes ...
+       // Not Usedm here
+
+        // add some new plots ...
+        var newPlots = //{
+          get_plots("peru", mydate)
+        //}
+
+        $(".mapcontainer_refresh").trigger('update', [{
+            deletePlotKeys: deletedPlots,
+            //mapOptions: updatedOptions,
+            newPlots: newPlots,
+            animDuration: 3000
+          }]);
+        //////////////////////////////////////
+        // circle animation:
+        //$("circle").css("fill","blue");
+        $( "circle" ).animate({
+          r:20 ,
+          opacity: 0.1
+        }, 2000 );
+        $( "circle" ).animate({
+          r:3 ,
+          opacity: 1
+        }, 1500 );
+
+  });
+});
+
+
+  </script>
+</body>
+</html>
