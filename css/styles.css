@@ -127,3 +127,8 @@ div {
   position: relative;
   text-align: left;
 }
+
+/*****************************/
+.score {
+    font-size: 30pt;
+}

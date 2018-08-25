@@ -1,7 +1,7 @@
 var events = [
 {
 	"name": "1-Alemania->Italia",
-	"date": "19230111",
+	"date": "192301",
 	"map": "world",
 	"data": {
 		"latitude": "52.5200066",
@@ -13,7 +13,7 @@ var events = [
 },
 {
 	"name": "2-Perú->Chile",
-	"date": "19230609",
+	"date": "192306",
 	"map": "world",
 	"data": {
 		"latitude": "-12.0463731",
@@ -25,7 +25,7 @@ var events = [
 },
 {
 	"name": "3-Perú->Perú",
-	"date": "19240118",
+	"date": "192401",
 	"map": "peru",
 	"data": {
 		"latitude": "-12.0463731",
@@ -37,7 +37,7 @@ var events = [
 },
 {
 	"name": "4-Perú->Perú",
-	"date": "19240516",
+	"date": "192405",
 	"map": "peru",
 	"data": {
 		"latitude": "-12.0463731",
@@ -49,7 +49,7 @@ var events = [
 },
 {
 	"name": "5-Italia->Perú",
-	"date": "19240503",
+	"date": "192405",
 	"map": "world",
 	"data": {
 		"latitude": "45.4642035",

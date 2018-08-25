@@ -45,11 +45,13 @@
   // Getting plots from data/events.js
   function get_plots(map, mydate) {
     my = {};
-    console.log("F get_plots ( "+map+"|"+mydate+" )");
+    console.log("func. get_plots ( "+map+"|"+mydate+" )");
     $.each( events, function( key, value ) {
+      //value["date"] = value["date"].toString().substr(0, value["date"].toString().length - 2);
+      if (value["date"].length > 6) { value["date"] = parseInt(value["date"].toString().substr(0,6)); }
       if (mydate >= value["date"])  {
         my[value["name"]] = value["data"];
-        console.log("> > > Accepted "+value["name"]+": my="+mydate+" >= "+value["date"]);
+        console.log("# # # Accepted "+value["name"].toString()+": my="+mydate+" >= "+value["date"]);
       }
     });
     //console.log(my.toString());
@@ -60,59 +62,17 @@
     var my = [];
     console.log("F get_LABELS ( "+map+"|"+mydate+" )");
     $.each( events, function( key, value ) {
+      //value["date"] = value["date"].toString().substr(0, value["date"].toString().length - 2);
       if (mydate >= value["date"])  {
         my.push(value["name"]);
-        console.log("> > > Accepted "+value["name"]+": my="+mydate+" >= "+value["date"]);
+        console.log("> > > Labels "+value["name"]+": my="+mydate+" >= "+value["date"]);
       }
     });
     return my;
   }
 
     $( function() {
-      var dt_from = "1923/01/01 00:00:01";
-      var dt_to = "1926/12/31 23:59:59";
-
-      $('.slider-time').html(dt_from);
-      //$('.slider-time2').html(dt_to);
-      var min_val = Date.parse(dt_from) / 1000;
-      var max_val = Date.parse(dt_to) / 1000;
-
-      function zeroPad(num, places) {
-        var zero = places - num.toString().length + 1;
-        return Array(+(zero > 0 && zero)).join("0") + num;
-      }
-
-      function formatDT(__dt) {
-        var year = __dt.getFullYear();
-        var month = zeroPad(__dt.getMonth() + 1, 2);
-        var date = zeroPad(__dt.getDate(), 2);
-        //var hours = zeroPad(__dt.getHours(), 2);
-        //var minutes = zeroPad(__dt.getMinutes(), 2);
-        //var seconds = zeroPad(__dt.getSeconds(), 2);
-        var mydate = [];
-        mydate["y"] = year;
-        mydate["m"] = month;
-        //mydate[d] = date;
-
-        //return year + '-' + month + '-' + date + ' ' + hours + ':' + minutes + ':' + seconds;
-        return mydate["m"]+"-"+mydate["y"];
-      };
-
-
-      $("#slider-range").slider({
-        //range: false,
-        min: min_val,
-        max: max_val,
-        step: 10,
-        values: [min_val, max_val],
-        slide: function(e, ui) {
-          var dt_cur_from = new Date(ui.values[0] * 1000); //.format("yyyy-mm-dd hh:ii:ss");
-          $('.slider-time').html(formatDT(dt_cur_from));
-
-          //var dt_cur_to = new Date(ui.values[1] * 1000); //.format("yyyy-mm-dd hh:ii:ss");
-          //$('.slider-time2').html(formatDT(dt_cur_to));
-        }
-      });
+      // Date dropdown selector
 
     });
   </script>
@@ -126,31 +86,14 @@
 <body>
 <div class="container">
     <div>
-        <h1>THE APP READS PLOTS FROM A js oBJECT (mariategui_events_v3.js)</h1>
-                <ul><li>Radio botton: point in time OR period (choose kind of slide)</li>
-                  <li>Set animDuration</li>
-                  <li>Set loop or not-loop</li>
-                  <li></li>
-                </ul>
+        <h1>Linking maps with slider interaction</h1>
                 <p class="setDate" id="19240101">No PageLoad 1924 1231</p>
                 <p class="setDate" id="19270101">No PageLoad 1927 1231</p>
-
-          <p id="output">OUTPUT</p>
     </div>
 
-    <div class="" style="width:100%;">
-      <div id="time-ran">
-        <p>Time Range:
-          <span class="slider-time"></span>
-          <!--
-           - <span class="slider-time2"></span>
-         -->
-        </p>
-        <div class="sliders_step1">
-          <div id="slider-range"></div>
-          </div>
-        </div>
-      </div>
+    <div class="" style="width:50%;padding:30px;margin: 0 auto;">
+      <input id="setDate" class="score" type="number" min="1922" max="1928" value="1922">
+    </div>
 
       <div class="mapcontainer mapcontainer_refresh div_map_left">
           <h2>Mapa del Perú</h2>
@@ -175,7 +118,7 @@
 <script>
 
 $(function () {
-    /*
+    /*4
      * Override default option example
      * Here we override defaultOptions for all instance!
      * => We want to set the stroke color different for all of our instance
@@ -206,16 +149,16 @@ $(function () {
 
     $(".mapcontainer").mapael({
         map: {
-            name: "peru_regions"
-            , zoom: {
+            name: "peru_regions",
+            zoom: {
                 enabled: true
-            }
-            , defaultPlot: {
+            },
+            defaultPlot: {
                 attrs: {
                     fill: "#ff0000",
                     opacity: 10
-                }
-                , text: {
+                },
+                text: {
                     attrs: {
                         fill: "#ff0000"
                     }
@@ -223,12 +166,12 @@ $(function () {
                         fill: "#000"
                     }
                 }
-            }
-            , defaultArea: {
+            },
+            defaultArea: {
                 attrs: {
-                    fill: "#000000"
-                }
-                , text: {
+                    fill: "#c3c3c3"
+                },
+                text: {
                     attrs: {
                         fill: "#ffffff"
                     }
@@ -250,48 +193,34 @@ $(function () {
         }
     });
 
-// >>>>>>>>>>>>>>>>>>>>>>>>
-/*
-// I use the updater from the MAP2 to update both maps
-$('#world').on('click', function (event){
-
-    // delete all plots ...
-    var deletedPlots = get_plots_labels(mariategui_plots, "world");
-
-    // Update some plots and areas attributes ...
-    // Not Usedm here
-
-   // add some new plots ...
-   var newPlots = get_plots(mariategui_plots, "world");
-
-    $(".mapcontainer_refresh").trigger('update', [{
-        deletePlotKeys: deletedPlots,
-        //mapOptions: updatedOptions,
-        newPlots: newPlots,
-        animDuration: 1000
-    }]);
-
-    // Save mydate as old_date var:
-    $("#old_date").html(mydate);
- });
-});
-*/
-
 ///////////////////////////////////////////
 //// MAP2
 
     var $mapcontainer2 = $(".mapcontainer2");
     $mapcontainer2.mapael({
         map: {
-            name: "world_countries"
-            , zoom: {
+            name: "world_countries",
+            zoom: {
                 enabled: true,
                 maxLevel: 20
-            }
-            , defaultPlot: {
+            },
+            defaultPlot: {
                 attrs: {
                   fill: "#ff0000",
                   opacity: 1
+                }
+            },
+            defaultArea: {
+                attrs: {
+                    fill: "#c3c3c3"
+                },
+                text: {
+                    attrs: {
+                        fill: "#ffffff"
+                    }
+                    , attrsHover: {
+                        fill: "#000"
+                    }
                 }
             }
         },
@@ -302,10 +231,8 @@ $('#world').on('click', function (event){
 
 // >>>>>>>>>>>>>>>>>>>>>>>>
 // UPDATING THE MAPS function
-    $('.setDate').on('click', function (event) {
-      console.log("###########################")
-      // Get new date
-      var mydate = event.target.id;
+    $('#setDate').change(function (event) {
+      var mydate = parseInt(event.target.value+"31");
       console.log("NEW mydate :"+mydate)
 
       // Get the old date
@@ -332,10 +259,10 @@ $('#world').on('click', function (event){
 
         $(".mapcontainer_refresh").trigger('update', [{
             deletePlotKeys: deletedPlots,
-            //mapOptions: updatedOptions,
             newPlots: newPlots,
             animDuration: 3000
           }]);
+
         //////////////////////////////////////
         // circle animation:
         //$("circle").css("fill","blue");
