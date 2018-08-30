@@ -92,43 +92,37 @@ p {
     position: relative;
 }
 div {
+  border:0px solid red;
+}
+.marquee {
   border:1px solid red;
+  z-index:20;
+  position: absolute;
+  margin-left: 850px;
+  margin-top: 200px;
+  height: 150px;
+  width: 300px;
+  background-color: #ffffff;
+  opacity: 0.6;
+  padding:10px;
 }
 
 .div_map_left {
-  width: 400px;
+  width: 340px;
+  z-index:10;
+  position: absolute;
+  margin-top: 140px;
 }
 .div_map_right {
-  width: 900px;
+  width: 1100px;
+  z-index:1;
+  margin-left: 230px;
 }
 /*********************************************/
 
-#time-range p {
-  font-family: "Arial", sans-serif;
-  font-size: 14px;
-  color: #333;
-}
-
-.ui-slider-horizontal {
-  height: 8px;
-  background: #D7D7D7;
-  border: 1px solid #BABABA;
-  box-shadow: 0 1px 0 #FFF, 0 1px 0 #CFCFCF inset;
-  clear: both;
-  margin: 8px 0;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  -ms-border-radius: 6px;
-  -o-border-radius: 6px;
-  border-radius: 6px;
-}
-
-.ui-slider {
-  position: relative;
-  text-align: left;
-}
-
-/*****************************/
 .score {
     font-size: 30pt;
+}
+.old_date {
+  display:none;
 }

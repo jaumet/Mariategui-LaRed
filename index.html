@@ -2,35 +2,20 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>MariateguiVis :: LaRed</title>
+  <title>La Red Marátegui</title>
   <link href="css/styles.css" rel="stylesheet">
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <style>
-  #custom-handle {
-    width: 8em;
-    height: 3em;
-    top: 10%;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    line-height: 1em;
-    font-size: 1em;
-    margin:0 50% 0 auto;
-  }
-  #slider {
-    width:80%;
-    margin-left:40px;
-  }
-  </style>
+  <!-- libs -->
   <script src="./js/jquery.min.js" charset="utf-8"></script>
   <script src="./js/jquery.mousewheel.min.js" charset="utf-8"></script>
   <script src="./js/raphael.min.js" charset="utf-8"></script>
   <script src="./js/jquery.mapael.js" charset="utf-8"></script>
+  <script src="./js/jquery-marquee.js" charset="utf-8"></script>
+  <!--  maps -->
   <script src="./js/maps/world_countries.js" charset="utf-8"></script>
   <script src="./js/maps/peru.min.js" charset="utf-8"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <!-- data -->
+  <script src="./data/mariategui_lared-300.js" charset="utf-8"></script>
 
-  <script src="./data/mariategui_lared.js" charset="utf-8"></script>
   <script type="text/javascript">
 
   // Get date from URL POST var:
@@ -44,17 +29,19 @@
 
   // Getting plots from data/events.js
   function get_plots(map, mydate) {
-    my = {};
-    console.log("func. get_plots ( "+map+"|"+mydate+" )");
+    my = {}; myMarquee = "";
+    //console.log("func. get_plots ( "+map+"|"+mydate+" )");
     $.each( events, function( key, value ) {
-      //value["date"] = value["date"].toString().substr(0, value["date"].toString().length - 2);
-      if (value["date"].length > 6) { value["date"] = parseInt(value["date"].toString().substr(0,6)); }
-      if (mydate >= value["date"])  {
+      value["date"] = parseInt(value["date"].toString().substr(0,4));
+      console.log(".... "+value["date"]+" ---->"+mydate);
+      if (value["date"] == mydate)  {
         my[value["name"]] = value["data"];
         console.log("# # # Accepted "+value["name"].toString()+": my="+mydate+" >= "+value["date"]);
+        myMarquee += value["name"].toString()+"<br />";
       }
     });
-    //console.log(my.toString());
+    myhtml = '<p>'+mydate+'</p><marquee id="marquee" behavior="scroll" direction="down" scrollamount="0.1" height="110" width="350">';
+    $(".marquee").html(myhtml+myMarquee+"</p></marquee>");
     return my;
   }
 
@@ -62,19 +49,14 @@
     var my = [];
     console.log("F get_LABELS ( "+map+"|"+mydate+" )");
     $.each( events, function( key, value ) {
-      //value["date"] = value["date"].toString().substr(0, value["date"].toString().length - 2);
       if (mydate >= value["date"])  {
         my.push(value["name"]);
         console.log("> > > Labels "+value["name"]+": my="+mydate+" >= "+value["date"]);
       }
     });
     return my;
-  }
+  };
 
-    $( function() {
-      // Date dropdown selector
-
-    });
   </script>
 
 </head>
@@ -86,13 +68,11 @@
 <body>
 <div class="container">
     <div>
-        <h1>Linking maps with slider interaction</h1>
-                <p class="setDate" id="19240101">No PageLoad 1924 1231</p>
-                <p class="setDate" id="19270101">No PageLoad 1927 1231</p>
+        <h2>La Red Marátegui</h2>
     </div>
 
     <div class="" style="width:50%;padding:30px;margin: 0 auto;">
-      <input id="setDate" class="score" type="number" min="1922" max="1928" value="1922">
+      <input id="setDate" class="score" type="number" min="1922" max="1930" value="1922">
     </div>
 
       <div class="mapcontainer mapcontainer_refresh div_map_left">
@@ -109,11 +89,29 @@
           </div>
       </div>
     </div>
-  <div>OLD DATE:
-    <div id="old_date"></div>
+  <div class="marquee">
+    <marquee id="marquee" behavior="scroll" direction="down" scrollamount="0.1" height="120" width="350">
+      <p>START Lorem ipsum dolor sit amet END</p>
+    </marquee>
   </div>
+  <div id="old_date" class="old_date"></div>
 
-<!----------------------------------------------->
+
+<!-----------------------
+
+ToDo:
+- Three floor barchar diagrams: 
+  > top: To al evennts = f( year )
+  > middle 1: Regions 1 (Peru/oters) = f( year )
+  > middel 2: Category = f(  )
+  > bottom: Regions 2 (Peru/LatinoAm./ NorthAm./Europe/Africa-Asia-Oceania(in case there is any) 
+  > 
+
+  Data structure: CSV
+  192totalNum, 192PeruNum, RestNum, LatinoAm, NorthAm, EuropeNum, Asia-Africa-OceaniaNum, Cat1Num, Cat2Num, Cat3Num... 
+
+
+------------------------>
 
 <script>
 
@@ -187,9 +185,6 @@ $(function () {
                 tooltip: {content: "region de Lima"},
                 attrs: {opacity: 0.4}
             },
-        },
-        plots: {
-            //get_plots(mariategui_plots, "peru")
         }
     });
 
@@ -223,16 +218,29 @@ $(function () {
                     }
                 }
             }
-        },
-        plots: {
-            //get_plots(mariategui_plots, "world")
         }
     });
 
+  function myMarquee() {
+        // basic version is: $('div.demo marquee').marquee() - but we're doing some sexy extras
+      $('marquee').marquee('pointer').mouseover(function () {
+          $(this).trigger('stop');
+      }).mouseout(function () {
+          $(this).trigger('start');
+      }).mousemove(function (event) {
+          if ($(this).data('drag') == true) {
+              this.scrollLeft = $(this).data('scrollX') + ($(this).data('x') - event.clientX);
+          }
+      }).mousedown(function (event) {
+          $(this).data('drag', true).data('x', event.clientX).data('scrollX', this.scrollLeft);
+      }).mouseup(function () {
+          $(this).data('drag', false);
+      })
+      };
 // >>>>>>>>>>>>>>>>>>>>>>>>
 // UPDATING THE MAPS function
     $('#setDate').change(function (event) {
-      var mydate = parseInt(event.target.value+"31");
+      var mydate = parseInt(event.target.value);
       console.log("NEW mydate :"+mydate)
 
       // Get the old date
@@ -256,13 +264,15 @@ $(function () {
         var newPlots = //{
           get_plots("peru", mydate)
         //}
-
+    
+    
         $(".mapcontainer_refresh").trigger('update', [{
             deletePlotKeys: deletedPlots,
             newPlots: newPlots,
             animDuration: 3000
           }]);
-
+        myMarquee()
+        
         //////////////////////////////////////
         // circle animation:
         //$("circle").css("fill","blue");
