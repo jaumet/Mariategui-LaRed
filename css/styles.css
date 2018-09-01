@@ -105,6 +105,11 @@ div {
   background-color: #ffffff;
   opacity: 0.6;
   padding:10px;
+  font-size:1.4em;
+}
+
+.marquee p {
+  margin:0;
 }
 
 .div_map_left {
@@ -119,6 +124,19 @@ div {
   margin-left: 230px;
 }
 
+.barchart_categories {
+  display:none;
+  border:1px solid red;
+  z-index:20;
+  position: absolute;
+  margin-left: 600px;
+  margin-top: 410px;
+  height: 150px;
+  width: 350px;
+  background-color: #ffffff;
+  opacity: 0.8;
+  padding:10px;  
+}
 /*********************************************/
 
 .score {
@@ -128,18 +146,22 @@ div {
   display:none;
 }
 
-/* my bar chart */
+/* my bar chart 1 */
 
 .barchart tr td {
   display: inline-block;
   vertical-align:bottom;
-  padding:3px;      
+  padding:2px;
   width: 80px;
   font-size:1.4em;
   text-align: center;
 }
+.barchart tr.years td {
+  padding:2px;
+}
 .barchart tr td div {
   background: #ff0000;
+  
 }
 .barchart tr.bars {
   font-size:1em;
@@ -147,4 +169,55 @@ div {
 }
 .highlighted {
     background: red;
+}
+
+/* my bar chart 2 **/
+
+.barchart tr.bars2 td {
+  width: 40px;
+  padding:1px;
+}
+
+tr.bars2 td {
+  width:80px;
+}
+
+tr.bars2 td:nth-child(2n) div {
+  background: #1724B5;
+  
+}
+
+tr.bars2 td  {
+  height:100%;
+}
+
+/* tr.bars2 td:nth-child(4n+2), tr.bars2 td:nth-child(4n+1), tr.bars td:nth-child(2n+1) { */
+tr.bars2 td:nth-child(2n), tr.bars td, tr.years td {
+  border-right: 1px solid #000;
+}
+
+tr.bars2 td:first-child, tr.bars td:first-child, tr.years td:first-child {
+  border-left: 1px solid #000;
+}
+/* barchart_cat */
+
+.barchart_cat tr td {
+  width:30px;
+  display: inline-block;
+  vertical-align:bottom;
+  padding:2px;
+  font-size:1.4em;
+  text-align: center;
+}
+.barchart_cat tr td div {
+  background: #ff0000;
+}
+.barchart_cat tr.bars3 td {
+  font-size:1em;
+  color: #c3c3c3;
+}
+.barchart_cat tr.cat td {
+  -ms-transform: rotate(40deg); /* IE 9 */
+  -webkit-transform: rotate(40deg); /* Safari 3-8 */
+  transform: rotate(40deg);
 }

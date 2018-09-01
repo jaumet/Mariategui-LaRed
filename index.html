@@ -93,7 +93,27 @@
           <td>1929</td>
           <td>1930</td>
         </tr>
+        <tr class="bars2">
+          <td><div style="height:10px;"></div></td>
+          <td><div style="height:100px;"></div></td>
+          <td><div style="height:130px;"></div></td>
+          <td><div style="height:50px;"></div></td>
+          <td><div style="height:78px;"></div></td>
+          <td><div style="height:104px;"></div></td>
+          <td><div style="height:30px;"></div></td>
+          <td><div style="height:67px;"></div></td>
+
+          <td><div style="height:10px;"></div></td>
+          <td><div style="height:100px;"></div></td>
+          <td><div style="height:130px;"></div></td>
+          <td><div style="height:50px;"></div></td>
+          <td><div style="height:78px;"></div></td>
+          <td><div style="height:104px;"></div></td>
+          <td><div style="height:30px;"></div></td>
+          <td><div style="height:67px;"></div></td>
+        </tr>
       </table>
+
     </div>
 
     <div class="mapcontainer mapcontainer_refresh div_map_left">
@@ -115,6 +135,38 @@
     <marquee id="marquee" behavior="scroll" direction="down" scrollamount="0.1" height="120" width="350">
       <p>START Lorem ipsum dolor sit amet END</p>
     </marquee>
+  </div>
+
+  <div class="barchart_categories">
+    <p>Temas de año <span id="getYear"></span>:</p>
+    <table class="barchart_cat" width="450" height="90">
+      <tr class="bars3">
+        <td>10<div style="height:10px;"></div></td>
+        <td>70<div style="height:70px;"></div></td>
+        <td>30<div style="height:30px;"></div></td>
+        <td>54<div style="height:50px;"></div></td>
+        <td>8<div style="height:8px;"></div></td>
+        <td>55<div style="height:55px;"></div></td>
+        <td>30<div style="height:30px;"></div></td>
+        <td>67<div style="height:67px;"></div></td>
+        <td>3<div style="height:3px;"></div></td>
+        <td>17<div style="height:17px;"></div></td>
+
+      </tr>
+      <tr class="cat">
+        <td>Viajes</td>
+        <td>Prensa</td>
+        <td>Arte</td>
+        <td>Salud</td>
+        <td>Familia</td>
+        <td>Escritores</td>
+        <td>Comercializaci&oacute;n</td>
+        <td>Canjeos</td>
+        <td>Suscriciones</td>
+        <td>Suscriciones</td>
+      </tr>
+    </table>
+
   </div>
 
   <div id="old_date" class="old_date">
@@ -271,6 +323,10 @@ $(function () {
       //  toggle color on selected <td>
       $(".years td").removeClass('highlighted');
       $(this).addClass('highlighted');
+
+      // Topics of the year: add content for the selected year
+      $(".barchart_categories").css({"display": "block"});
+      $("#getYear").html(mydate);
 
       // Get the old date
       var olddate = $("#old_date").html();
