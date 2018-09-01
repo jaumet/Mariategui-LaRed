@@ -6,6 +6,7 @@
   <link href="css/styles.css" rel="stylesheet">
   <!-- libs -->
   <script src="./js/jquery.min.js" charset="utf-8"></script>
+  <script src="./js/jquery-ui.js"></script>
   <script src="./js/jquery.mousewheel.min.js" charset="utf-8"></script>
   <script src="./js/raphael.min.js" charset="utf-8"></script>
   <script src="./js/jquery.mapael.js" charset="utf-8"></script>
@@ -45,9 +46,9 @@
     return my;
   }
 
-  function get_plots_labels(map, mydate) {
+  function get_plots_labels(mydate) {
     var my = [];
-    console.log("F get_LABELS ( "+map+"|"+mydate+" )");
+    console.log("F get_LABELS ( "+mydate+" )");
     $.each( events, function( key, value ) {
       if (mydate >= value["date"])  {
         my.push(value["name"]);
@@ -71,7 +72,7 @@
         <h2>La Red Marátegui</h2>
     </div>
 
-    <div class="" style="width:90%;padding:30px;margin: 0 auto;"> 
+    <div id="div_setDate_and_barcharts" class="" style="width:90%;padding:30px;margin: 0 auto;"> 
       <table class="barchart" width="950" height="70">
         <tr class="bars">
           <td class="b1">10<div style="height:10px;"></div></td>
@@ -116,14 +117,14 @@
 
     </div>
 
-    <div class="mapcontainer mapcontainer_refresh div_map_left">
+    <div id="div_map_peru" class="mapcontainer mapcontainer_refresh div_map_left">
         <h2>Mapa del Perú</h2>
         <div class="map">
             <span>Alternative content for the map</span>
         </div>
     </div>
 
-    <div class="mapcontainer2 mapcontainer_refresh div_map_right">
+    <div id="div_map_world" class="mapcontainer2 mapcontainer_refresh div_map_right">
         <h2>Mapa Mundial</h2>
         <div class="map">
             <span>Alternative content for the map</span>
@@ -131,13 +132,15 @@
     </div>
   </div>
 
-  <div class="marquee">
-    <marquee id="marquee" behavior="scroll" direction="down" scrollamount="0.1" height="120" width="350">
-      <p>START Lorem ipsum dolor sit amet END</p>
+  <div id="div_marquee1" class="marquee">
+    <marquee id="marquee" behavior="scroll" direction="down" scrollamount="0.1" height="140" width="350">
+    <p>Dos maneras predefinidas de relación con los datos aquí representados:</p>
+      <p>Esta que ves es la manera interactiva</p>
+      <p>Estamos preparando la manera reproducción continua.</p>
     </marquee>
   </div>
 
-  <div class="barchart_categories">
+  <div id="div_barchart_by_topic" class="barchart_categories">
     <p>Temas de año <span id="getYear"></span>:</p>
     <table class="barchart_cat" width="450" height="90">
       <tr class="bars3">
@@ -177,9 +180,9 @@
 
 ToDo:
 - Three floor barchar diagrams: 
-  > top: To al evennts = f( year )
-  > middle 1: Regions 1 (Peru/oters) = f( year )
-  > middel 2: Category = f(  )
+DONE  > top: To al evennts = f( year )
+DONE  > middle 1: Regions 1 (Peru/oters) = f( year )
+DONE  > middel 2: Category = f(  )
   > bottom: Regions 2 (Peru/LatinoAm./ NorthAm./Europe/Africa-Asia-Oceania(in case there is any) 
   > 
 
@@ -278,7 +281,8 @@ $(function () {
             defaultPlot: {
                 attrs: {
                   fill: "#ff0000",
-                  opacity: 1
+                  opacity: 1,
+                  r:50
                 }
             },
             defaultArea: {
@@ -314,8 +318,11 @@ $(function () {
       })
     };
 
-    // >>>>>>>>>>>>>>>>>>>>>>>>
-    // UPDATING THE MAPS function
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// UPDATING MAPS data and function
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
     $(".years td").on ("click", function () {
       var mydate = parseInt($(this).text());
       console.log("NEW mydate :"+mydate)
@@ -338,7 +345,7 @@ $(function () {
       if (olddate.length<1) {
         var deletedPlots = {};
       } else {
-        var deletedPlots = get_plots_labels("peru", olddate);
+        var deletedPlots = get_plots_labels(olddate);
       }
       console.log("deletedPlots: "+deletedPlots)
 
@@ -366,11 +373,19 @@ $(function () {
           opacity: 0.1
         }, 2000 );
         $( "circle" ).animate({
-          r:3 ,
+          r:6 ,
           opacity: 1
         }, 1500 );
 
   });
+
+  // Defining dragable elements w/ jquery-ui
+  $( "#div_marquee1" ).draggable();
+  $( "#div_barchart_by_topic" ).draggable();
+  $( "#div_setDate_and_barcharts" ).draggable();
+  $( "#div_map_world" ).draggable();  
+  $( "#div_map_peru" ).draggable();
+
 });
 
 /// 

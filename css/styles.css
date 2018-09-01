@@ -221,3 +221,11 @@ tr.bars2 td:first-child, tr.bars td:first-child, tr.years td:first-child {
   -webkit-transform: rotate(40deg); /* Safari 3-8 */
   transform: rotate(40deg);
 }
+
+/* jquery-ui draggable*/
+#div_marquee1, #div_barchart_by_topic, #div_setDate_and_barcharts, #div_map_world, #div_map_peru {
+  cursor: move;,
+}
+tr.years td, circle {
+  cursor:pointer;
+}
