@@ -66,35 +66,59 @@
 <!-- ############################################## -->
 
 <body>
-<div class="container">
+  <div class="container">
     <div>
         <h2>La Red Marátegui</h2>
     </div>
 
-    <div class="" style="width:50%;padding:30px;margin: 0 auto;">
-      <input id="setDate" class="score" type="number" min="1922" max="1930" value="1922">
+    <div class="" style="width:90%;padding:30px;margin: 0 auto;"> 
+      <table class="barchart" width="950" height="70">
+        <tr class="bars">
+          <td class="b1">10<div style="height:10px;"></div></td>
+          <td class="b2">70<div style="height:70px;"></div></td>
+          <td class="b3">80<div style="height:80px;"></div></td>
+          <td class="b4">50<div style="height:50px;"></div></td>
+          <td class="b5">48<div style="height:48px;"></div></td>
+          <td class="b6">45<div style="height:45px;"></div></td>
+          <td class="b7">30<div style="height:30px;"></div></td>
+          <td class="b8">67<div style="height:67px;"></div></td>
+        </tr>
+        <tr class="years">
+          <td>1923</td>
+          <td>1924</td>
+          <td>1925</td>
+          <td>1926</td>
+          <td>1927</td>
+          <td>1928</td>
+          <td>1929</td>
+          <td>1930</td>
+        </tr>
+      </table>
     </div>
 
-      <div class="mapcontainer mapcontainer_refresh div_map_left">
-          <h2>Mapa del Perú</h2>
-          <div class="map">
-              <span>Alternative content for the map</span>
-          </div>
-      </div>
-
-      <div class="mapcontainer2 mapcontainer_refresh div_map_right">
-          <h2>Mapa Mundial</h2>
-          <div class="map">
-              <span>Alternative content for the map</span>
-          </div>
-      </div>
+    <div class="mapcontainer mapcontainer_refresh div_map_left">
+        <h2>Mapa del Perú</h2>
+        <div class="map">
+            <span>Alternative content for the map</span>
+        </div>
     </div>
+
+    <div class="mapcontainer2 mapcontainer_refresh div_map_right">
+        <h2>Mapa Mundial</h2>
+        <div class="map">
+            <span>Alternative content for the map</span>
+        </div>
+    </div>
+  </div>
+
   <div class="marquee">
     <marquee id="marquee" behavior="scroll" direction="down" scrollamount="0.1" height="120" width="350">
       <p>START Lorem ipsum dolor sit amet END</p>
     </marquee>
   </div>
-  <div id="old_date" class="old_date"></div>
+
+  <div id="old_date" class="old_date">
+  </div>
 
 
 <!-----------------------
@@ -108,7 +132,7 @@ ToDo:
   > 
 
   Data structure: CSV
-  192totalNum, 192PeruNum, RestNum, LatinoAm, NorthAm, EuropeNum, Asia-Africa-OceaniaNum, Cat1Num, Cat2Num, Cat3Num... 
+  192totalNum, 192PeruNum, RestNum, RestoLatinoAm, NorthAm, EuropeNum, Asia-Africa-OceaniaNum, Cat1Num, Cat2Num, Cat3Num... 
 
 
 ------------------------>
@@ -116,7 +140,7 @@ ToDo:
 <script>
 
 $(function () {
-    /*4
+    /*
      * Override default option example
      * Here we override defaultOptions for all instance!
      * => We want to set the stroke color different for all of our instance
@@ -236,12 +260,17 @@ $(function () {
       }).mouseup(function () {
           $(this).data('drag', false);
       })
-      };
-// >>>>>>>>>>>>>>>>>>>>>>>>
-// UPDATING THE MAPS function
-    $('#setDate').change(function (event) {
-      var mydate = parseInt(event.target.value);
+    };
+
+    // >>>>>>>>>>>>>>>>>>>>>>>>
+    // UPDATING THE MAPS function
+    $(".years td").on ("click", function () {
+      var mydate = parseInt($(this).text());
       console.log("NEW mydate :"+mydate)
+
+      //  toggle color on selected <td>
+      $(".years td").removeClass('highlighted');
+      $(this).addClass('highlighted');
 
       // Get the old date
       var olddate = $("#old_date").html();
@@ -288,7 +317,7 @@ $(function () {
   });
 });
 
-
+/// 
   </script>
 </body>
 </html>

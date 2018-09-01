@@ -118,6 +118,7 @@ div {
   z-index:1;
   margin-left: 230px;
 }
+
 /*********************************************/
 
 .score {
@@ -125,4 +126,25 @@ div {
 }
 .old_date {
   display:none;
+}
+
+/* my bar chart */
+
+.barchart tr td {
+  display: inline-block;
+  vertical-align:bottom;
+  padding:3px;      
+  width: 80px;
+  font-size:1.4em;
+  text-align: center;
+}
+.barchart tr td div {
+  background: #ff0000;
+}
+.barchart tr.bars {
+  font-size:1em;
+  color: #c3c3c3;
+}
+.highlighted {
+    background: red;
 }
