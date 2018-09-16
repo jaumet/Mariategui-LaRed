@@ -37,11 +37,11 @@
       console.log(".... "+value["date"]+" ---->"+mydate);
       if (value["date"] == mydate)  {
         my[value["name"]] = value["data"];
-        console.log("# # # Accepted "+value["name"].toString()+": my="+mydate+" >= "+value["date"]);
-        myMarquee += value["name"].toString()+"<br />";
+        //console.log("# # # Accepted "+value["name"].toString()+": my="+mydate+" >= "+value["date"]);
+        myMarquee += value["name"].toString()+" => "+value["data"]["value"][0].toString()+"<br />";
       }
     });
-    myhtml = '<p>'+mydate+'</p><marquee id="marquee" behavior="scroll" direction="down" scrollamount="0.1" height="110" width="350">';
+    myhtml = '<p>Año '+mydate+': Origenes, destinos y temas.</p><marquee id="marquee" behavior="scroll" direction="down" scrollamount="0.1" height="85" width="250"><p>';
     $(".marquee").html(myhtml+myMarquee+"</p></marquee>");
     return my;
   }
@@ -52,7 +52,7 @@
     $.each( events, function( key, value ) {
       if (mydate >= value["date"])  {
         my.push(value["name"]);
-        console.log("> > > Labels "+value["name"]+": my="+mydate+" >= "+value["date"]);
+        //console.log("> > > Labels "+value["name"]+": my="+mydate+" >= "+value["date"]);
       }
     });
     return my;
@@ -68,13 +68,12 @@
 
 <body>
   <div class="container">
-    <div>
-        <h2>La Red Marátegui</h2>
-    </div>
-
-    <div id="div_setDate_and_barcharts" class="" style="width:90%;padding:30px;margin: 0 auto;"> 
-      <table class="barchart" width="950" height="70">
+    <div id="div_setDate_and_barcharts"> 
+        <h2>La Red Mar&aacute;tegui (clic en los años para ver la actividad entre 1923 y 1930)</h2>
+    
+      <table class="barchart" width="850" height="50">
         <tr class="bars">
+          <td class="myLegend"><span><b>Legend:</b><br />Cartas por año</span></td>
           <td class="b1">10<div style="height:10px;"></div></td>
           <td class="b2">70<div style="height:70px;"></div></td>
           <td class="b3">80<div style="height:80px;"></div></td>
@@ -85,6 +84,7 @@
           <td class="b8">67<div style="height:67px;"></div></td>
         </tr>
         <tr class="years">
+          <td class="myLegend"><span>Años</span></td>
           <td>1923</td>
           <td>1924</td>
           <td>1925</td>
@@ -95,21 +95,23 @@
           <td>1930</td>
         </tr>
         <tr class="bars2">
+          <td class="myLegend"><span>Perú/resto del mundo</span></td>
+          <td class="myLegend"><div style="height:0px;"></div></td>
           <td><div style="height:10px;"></div></td>
-          <td><div style="height:100px;"></div></td>
-          <td><div style="height:130px;"></div></td>
+          <td><div style="height:70px;"></div></td>
+          <td><div style="height:60px;"></div></td>
           <td><div style="height:50px;"></div></td>
-          <td><div style="height:78px;"></div></td>
-          <td><div style="height:104px;"></div></td>
+          <td><div style="height:58px;"></div></td>
+          <td><div style="height:64px;"></div></td>
           <td><div style="height:30px;"></div></td>
           <td><div style="height:67px;"></div></td>
 
           <td><div style="height:10px;"></div></td>
-          <td><div style="height:100px;"></div></td>
-          <td><div style="height:130px;"></div></td>
+          <td><div style="height:60px;"></div></td>
+          <td><div style="height:70px;"></div></td>
           <td><div style="height:50px;"></div></td>
-          <td><div style="height:78px;"></div></td>
-          <td><div style="height:104px;"></div></td>
+          <td><div style="height:70px;"></div></td>
+          <td><div style="height:54px;"></div></td>
           <td><div style="height:30px;"></div></td>
           <td><div style="height:67px;"></div></td>
         </tr>
@@ -118,14 +120,12 @@
     </div>
 
     <div id="div_map_peru" class="mapcontainer mapcontainer_refresh div_map_left">
-        <h2>Mapa del Perú</h2>
         <div class="map">
             <span>Alternative content for the map</span>
         </div>
     </div>
 
     <div id="div_map_world" class="mapcontainer2 mapcontainer_refresh div_map_right">
-        <h2>Mapa Mundial</h2>
         <div class="map">
             <span>Alternative content for the map</span>
         </div>
@@ -133,7 +133,7 @@
   </div>
 
   <div id="div_marquee1" class="marquee">
-    <marquee id="marquee" behavior="scroll" direction="down" scrollamount="0.1" height="140" width="350">
+    <marquee id="marquee" behavior="scroll" direction="down" scrollamount="0.1" height="140" width="250">
     <p>Dos maneras predefinidas de relación con los datos aquí representados:</p>
       <p>Esta que ves es la manera interactiva</p>
       <p>Estamos preparando la manera reproducción continua.</p>
@@ -141,7 +141,7 @@
   </div>
 
   <div id="div_barchart_by_topic" class="barchart_categories">
-    <p>Temas de año <span id="getYear"></span>:</p>
+    <p>Temas del año <span id="getYear"></span>:</p>
     <table class="barchart_cat" width="450" height="90">
       <tr class="bars3">
         <td>10<div style="height:10px;"></div></td>
@@ -323,7 +323,7 @@ $(function () {
 // UPDATING MAPS data and function
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-    $(".years td").on ("click", function () {
+    $(".years td").not(".years td.legend").on ("click", function () {
       var mydate = parseInt($(this).text());
       console.log("NEW mydate :"+mydate)
 
@@ -344,8 +344,10 @@ $(function () {
       // delete all plots ...
       if (olddate.length<1) {
         var deletedPlots = {};
+      } else if (olddate < mydate) {
+        var deletedPlots = get_plots_labels(olddate);        
       } else {
-        var deletedPlots = get_plots_labels(olddate);
+        var deletedPlots = {};
       }
       console.log("deletedPlots: "+deletedPlots)
 
@@ -364,6 +366,9 @@ $(function () {
             animDuration: 3000
           }]);
         myMarquee()
+        
+        // Add class to all circles:
+        //$("circle"
         
         //////////////////////////////////////
         // circle animation:
